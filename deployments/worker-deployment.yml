@@ -1,0 +1,31 @@
+kubectl logs -f deployment/vote-worker -n movie-votingapiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote-worker
+  template:
+    metadata:
+      labels:
+        app: vote-worker
+    spec:
+      containers:
+      - name: vote-worker
+        image: sameerchavan31/movie-vote-worker:v2
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: REDIS_URL
+          value: redis://redis:6379/0
+        - name: POSTGRES_HOST
+          value: postgres
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          value: votes
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
